@@ -1,0 +1,27 @@
+.button {
+    background-color:rgb(255, 217, 0);
+    border-color: rgb(255, 217, 0);
+    color: black;
+    border-radius: 5px;
+    border-style: solid;
+    height: 40px;
+}
+
+.button:hover {
+    background-color: transparent;
+    border-color: rgb(255, 217, 0);
+    color: rgb(255, 217, 0);
+    border-radius: 5px;
+}
+
+.button:active {
+    background-color:rgb(220, 194, 46);
+    border-color: rgb(220, 194, 46);
+}
+
+.button:focus {
+    background-color:rgb(220, 194, 46);
+    border-color: rgb(220, 194, 46);
+    outline:rgb(0, 0, 0);
+    box-shadow: none;
+}

@@ -23,7 +23,7 @@ export default function Signup() {
             setError("");
             setLoading(true);
             await signup(emailRef.current.value, passwordRef.current.value);
-            history.push('/');
+            history.push('/add-account');
         } catch {
             setError("Failed to create account");
         }
@@ -60,7 +60,7 @@ export default function Signup() {
                                 <Form.Label>Confirm Password</Form.Label>
                                 <Form.Control type="password" ref={passwordConfirmRef} required />
                             </Form.Group>
-                            <Button disabled={loading} className="w-100" type="submit">Sign Up</Button>
+                            <button disabled={loading} className="button w-100" type="submit">Sign Up</button>
                         </Form>
                     </Card.Body>
                 </div>

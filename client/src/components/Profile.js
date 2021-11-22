@@ -3,37 +3,12 @@ import { Card, Button, Alert, Container, Form } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
 import { Link, useHistory } from "react-router-dom";
 
-export default function Profile(props) {
+export default function Profile() {
     const  [error, setError] = useState("");
     const { currentUser, logout } = useAuth();
     const history  = useHistory();
     const [img, setImg] = useState({});
     const [loading, setLoading] = useState(false);
- 
-    var loadingTime = 0;
-    
-    useEffect(() => {
-        let isMounted = true;
-        setImageLink().then(() => {
-            if (isMounted) setImg({url: `https://s3-us-west-1.amazonaws.com/spot-tracker-pfps/${currentUser.uid + ".jpg"}`, hash: new Date().getTime()})})
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    async function setImageLink() {
-        //user has navigates from updateprofile
-        if (history.location.state != null) {
-            if (history.location.state.from === 'fromUpdate') {
-                setLoading(true);
-                props.setShouldUpdate(true);
-                // set load time based on how big the file is to give AWS time to upload the file
-                loadingTime = history.location.state.fileSize/1000 + 1000;
-            }
-        }
-        setTimeout(() => {
-            setLoading(false);
-            props.setShouldUpdate(false);
-            history.replace({pathname: '/profile', state: {from: 'fromProfile'}});
-        }, loadingTime);
-    };
 
     async function handleLogout() {
         setError('')
@@ -77,8 +52,6 @@ export default function Profile(props) {
                                 <strong>Email: </strong> 
                                 <span>{currentUser.email}</span>
                             </div>
-                            <Link to='/my-spots' className="btn btn-primary w-100 mb-2">My Spots</Link>
-                            <Link to='/update-profile' className="btn btn-primary w-100">Update Profile</Link>
                         </Form>
                     </Card.Body>
                 </div>

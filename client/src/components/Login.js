@@ -1,7 +1,7 @@
 import React, {useRef, useState} from "react";
 import {Form, Button, Card, Container, Alert} from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext';
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Login() {
     const emailRef = useRef();
@@ -18,7 +18,7 @@ export default function Login() {
             setError("")
             setLoading(true)
             await login(emailRef.current.value, passwordRef.current.value)
-            history.push('/')
+            history.push('/add-account')
         } catch {
             setError("Failed to sign in")
         }
@@ -51,7 +51,7 @@ export default function Login() {
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control type="password" ref={passwordRef} required />
                             </Form.Group>
-                            <Button disabled={loading} className="w-100" type="submit">Login</Button>
+                            <button disabled={loading} className="button w-100" type="submit">Login</button>
                         </Form>
                         <div className="w-100 text-center mt-3">
                     <Link to='/forgot-password'>Forgot password? </Link>

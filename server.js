@@ -3,7 +3,8 @@ const cors = require('cors');
 const db = require('./db/db');
 const path = require('path');
 
-const spotRouter = require('./routes/spot-router');
+const accountRouter = require('./routes/account-router');
+const landHoldingRouter = require('./routes/land-holding-router');
 
 const app = express();
 const apiPort = 3001;
@@ -14,7 +15,8 @@ app.use(express.json());
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.use('/api', spotRouter);
+app.use('/api', accountRouter);
+app.use('/api', landHoldingRouter);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {

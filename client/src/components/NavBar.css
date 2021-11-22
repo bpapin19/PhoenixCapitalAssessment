@@ -2,26 +2,43 @@
     display: flex;
     justify-content: center;
     z-index: 10;
+    background-color: black;
+    text-align: center;
 }
 
 .navlink-title {
-    color: black;
+    color: gold;
     text-decoration: none;
-    padding: 0 5px;
+    width: 150px;
 }
 
 .site-title {
-    color: black;
+    color: gold;
     text-decoration: none;
     font-size: 25px;
+    width: 250px;
 }
 
-.site-title:hover, .navlink-title:hover{
+.navlink-title:hover{
     text-decoration: none;
+    background-color: transparent;
+    color: gold;
+    border: 2px solid gold;
+    border-radius: 5px;
 }
 
+.active {
+    border-radius: 5px;
+    background-color: gold;
+    color: black;
+}
 
-  
+.active:hover {
+    border-radius: 5px;
+    background-color: gold;
+    color: black;
+}
+
 .pin {
     position: fixed;
     top: 0;
@@ -73,10 +90,6 @@
     }
 
     .site-title {
-        font-size: 16px;
-    }
-
-    .username {
         display: none;
     }
 
@@ -86,11 +99,6 @@
 
     .sign-in-icon {
         display: inline;
-    }
-
-    .pfp {
-        height: 30px;
-        width: 30px;
     }
 
     .logo {
