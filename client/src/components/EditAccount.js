@@ -74,7 +74,6 @@ useEffect(() => {
             setSuccess(res.data.message);
         })
         .catch(res => {
-          console.log(res)
           setError("Error updating account. Name and address must be unique.");
         });
         e.target.reset();
