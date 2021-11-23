@@ -59,7 +59,7 @@ export default function ViewAccounts() {
           .then(res => {
             setAccountsArray(res.data.data);
           });
-      }, []); // eslint-disable-line react-hooks/exhaustive-deps
+      }, []);
 
     return (
     <div>
