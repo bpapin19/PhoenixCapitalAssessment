@@ -36,14 +36,19 @@ export default function LandHoldings() {
             url: `${baseUrl}/api/land-holding/${holdingToDelete._id}`,
           })
           .then(res => {
+              // Success Alert Transition
               setTransition(true);
                 setTimeout(() => {
                     setTransition(false);
                     setSuccess("");
                 }, 3000);
               setSuccess(holdingToDelete.name + " was successfully deleted");
+
+              // Re-Render holdings array
               var newHoldingsArray = holdingsArray.filter(holding => holding._id !== holdingToDelete._id);
               setHoldingsArray(newHoldingsArray);
+
+              // subtract a holding from the number of holdings of that account
               axios({
                 method: 'put',
                 url: baseUrl + "/api/account/" + params.id,
@@ -53,6 +58,7 @@ export default function LandHoldings() {
                 }
               });
           }).catch(res => {
+            // Error Alert Transition
             setTransition(true);
             setTimeout(() => {
                 setTransition(false);
@@ -62,6 +68,87 @@ export default function LandHoldings() {
           });
     }
 
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        var section_name = sectionRef.current.value + "-" + townshipRef.current.value + "-" + rangeRef.current.value;
+        var name = section_name + " " + entityRef.current.value;
+        var royalty = royaltyRef.current.value.substring(0, royaltyRef.current.value.length - 1);
+  
+        if (error === "") {
+          axios({
+            method: 'post',
+            url: baseUrl + "/api/land-holding",
+            data: {
+              name: name,
+              account: params.id,
+              legalEntity: entityRef.current.value,
+              netMineralAcres: netAcresRef.current.value,
+              mineralOwnerRoyalty: royalty,
+              sectionName: section_name,
+              section: sectionRef.current.value,
+              township: townshipRef.current.value,
+              range: rangeRef.current.value,
+              titleSource: titleType
+            }
+          })
+          .then(res => {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false);
+                setSuccess("");
+            }, 3000);
+              setSuccess(res.data.message);
+              e.target.reset();
+          })
+          .catch(res => {
+            setTransition(true);
+            setTimeout(() => {
+                setTransition(false);
+                setError("");
+            }, 3000);
+            setError("Error adding account, check form fields.");
+          });
+
+          // Add one to numHoldings for account ID
+          axios({
+            method: 'put',
+            url: baseUrl + "/api/account/" + params.id,
+            data: {
+                numHoldings: holdingsArray.length,
+                operation: "increment"
+            }
+          });
+        }
+        setError("");
+      }
+
+    // Inital get request on page load
+    useEffect(() => {
+          axios({
+            method: 'get',
+            url: baseUrl + `/api/land-holdings/${params.id}`
+          })
+          .then(res => {
+            setHoldingsArray(res.data.data);
+          });
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+      useEffect(() => {
+        axios({
+          method: 'get',
+          url: baseUrl + `/api/account/${params.id}`
+        })
+        .then(res => {
+          setAccount(res.data.data);
+        });
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const handleTitleChange = e => {
+        setTitleType(e.target.value);
+    }
+
+    // Toggle Collapse dropdown form
     function collapseAddHolding() {
         if (open) {
             setOpen(false);
@@ -72,6 +159,7 @@ export default function LandHoldings() {
         }
     }
 
+    // We do this to show the holdings in chronological order
     function reverseArray(holdingsArray) {
         var reversedHoldingsArray = [];
         for (var i = holdingsArray.length-1; i >= 0; i--) {
@@ -119,84 +207,6 @@ export default function LandHoldings() {
             percentage.setSelectionRange(percentage.value.length-1, percentage.value.length-1);
         }
     };
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        var section_name = sectionRef.current.value + "-" + townshipRef.current.value + "-" + rangeRef.current.value;
-        var name = section_name + " " + entityRef.current.value;
-        var royalty = royaltyRef.current.value.substring(0, royaltyRef.current.value.length - 1);
-  
-        if (error === "") {
-          axios({
-            method: 'post',
-            url: baseUrl + "/api/land-holding",
-            data: {
-              name: name,
-              account: params.id,
-              legalEntity: entityRef.current.value,
-              netMineralAcres: netAcresRef.current.value,
-              mineralOwnerRoyalty: royalty,
-              sectionName: section_name,
-              section: sectionRef.current.value,
-              township: townshipRef.current.value,
-              range: rangeRef.current.value,
-              titleSource: titleType
-            }
-          })
-          .then(res => {
-            setTransition(true);
-            setTimeout(() => {
-                setTransition(false);
-                setSuccess("");
-            }, 3000);
-              setSuccess(res.data.message);
-              e.target.reset();
-          })
-          .catch(res => {
-            setTransition(true);
-            setTimeout(() => {
-                setTransition(false);
-                setError("");
-            }, 3000);
-            setError("Error adding account, check form fields.");
-          });
-
-          axios({
-            method: 'put',
-            url: baseUrl + "/api/account/" + params.id,
-            data: {
-                numHoldings: holdingsArray.length,
-                operation: "increment"
-            }
-          });
-        }
-        setError("");
-      }
-
-    useEffect(() => {
-          axios({
-            method: 'get',
-            url: baseUrl + `/api/land-holdings/${params.id}`
-          })
-          .then(res => {
-            setHoldingsArray(res.data.data);
-          });
-      }, [success]); // eslint-disable-line react-hooks/exhaustive-deps
-
-      useEffect(() => {
-        axios({
-          method: 'get',
-          url: baseUrl + `/api/account/${params.id}`
-        })
-        .then(res => {
-          setAccount(res.data.data);
-        });
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-    const handleTitleChange = e => {
-        setTitleType(e.target.value);
-    }
 
     const borderStyles = {
         borderRadius: "10px",
